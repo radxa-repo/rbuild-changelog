@@ -1,0 +1,45 @@
+name: rbuild-changelog
+description: Generate changelog between rbuild environment
+inputs:
+  product:
+    required: true
+  from:
+    required: false
+  to:
+    required: false
+  file_name:
+    required: false
+    default: "changelog.md"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: radxa-repo/rbuild-changelog
+        path: .changelog/rbuild-changelog
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: radxa-repo/bsp
+        path: .changelog/bsp
+        fetch-depth: 0
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: radxa-repo/rbuild
+        path: .changelog/rbuild
+        fetch-depth: 0
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: radxa/overlays
+        path: .changelog/overlays
+        fetch-depth: 0
+    - name: Generate changelog
+      shell: bash
+      run: |
+        _FROM="${{ inputs.from }}"
+        _TO="${{ inputs.TO }}"
+        .changelog/rbuild-changelog/changelog ${{ inputs.product }} ${_FROM:+-f $_FROM} ${_TO:+-t $_TO} | \
+          tee .changelog/${{ inputs.file_name }}

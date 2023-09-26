@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+main() {
+    SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+    source "$SCRIPT_DIR/lib/gh.sh"
+    source "$SCRIPT_DIR/lib/core.sh"
+
+    local temp
+    if ! temp="$(getopt -o "hf:t:" -l "help,from:,to:" -n "$0" -- "$@")"
+    then
+        return
+    fi
+    eval set -- "$temp"
+
+    local FROM_RELEASE=""
+    local TO_RELEASE=""
+
+    while true
+    do
+        temp="$1"
+        shift
+        case "$temp" in
+            -h|--help)
+                _help
+                return
+                ;;
+            -f|--from)
+                FROM_RELEASE="$1"
+                shift
+                ;;
+            -t|--to)
+                TO_RELEASE="$1"
+                shift
+                ;;
+            --)
+                break
+                ;;
+        esac
+    done
+
+    temp="${1:-}"
+    shift || true
+    case "$temp" in
+        "")
+            _help
+            return
+            ;;
+        *)
+            _gh_set_repo "radxa-build/$temp"
+            if ! _gh_check_available
+            then
+                echo "$temp is not a supported product." >&2
+                return 1
+            fi
+
+            _generate_changelog "$temp" "$FROM_RELEASE" "$TO_RELEASE"
+            ;;
+    esac
+}
+
+set -euo pipefail
+shopt -s nullglob
+
+LC_ALL="C"
+LANG="C"
+LANGUAGE="C"
+
+main "$@"
