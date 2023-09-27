@@ -37,12 +37,8 @@ jobs:
       - name: Query available board configs
         id: query
         run: |
-          QUERY_FAILED=false
-          echo "products=$(gh repo list radxa-build --json name --jq 'map(.name)' || QUERY_FAILED=true)" >> $GITHUB_OUTPUT
-          if $QUERY_FAILED
-          then
-            gh api rate_limit
-          fi
+          gh api rate_limit
+          echo "products=$(gh repo list radxa-build --json name --jq 'map(.name)')" >> $GITHUB_OUTPUT
   changelog:
     needs: query
     runs-on: ubuntu-latest
