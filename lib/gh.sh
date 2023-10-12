@@ -7,7 +7,7 @@ _gh_set_repo() {
 }
 
 _gh_check_available() {
-    gh repo view "$GH_REPO" --json name &>/dev/null
+    gh repo view "$GH_REPO" --json name 2>&1
 }
 
 _gh_get_last_release() {

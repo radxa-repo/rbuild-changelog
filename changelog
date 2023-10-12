@@ -46,10 +46,12 @@ main() {
             return
             ;;
         *)
+            local ret
             _gh_set_repo "radxa-build/$temp"
-            if ! _gh_check_available
+            if ! ret=$(_gh_check_available)
             then
-                echo "$temp is not a supported product." >&2
+                echo "$temp is not a supported product:" >&2
+                echo "$ret" >&2
                 return 1
             fi
 
