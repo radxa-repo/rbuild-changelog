@@ -53,7 +53,7 @@ jobs:
           product: ${{ matrix.product }}
           file_name: ${{ matrix.product }}.md
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: rbuild-changelog
           path: .changelog/*.md
