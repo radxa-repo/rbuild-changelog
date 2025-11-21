@@ -14,24 +14,24 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: radxa-repo/rbuild-changelog
         path: .changelog/rbuild-changelog
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: radxa-repo/bsp
         path: .changelog/bsp
         fetch-depth: 0
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: radxa-repo/rbuild
         path: .changelog/rbuild
         fetch-depth: 0
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: radxa/overlays
         path: .changelog/overlays
